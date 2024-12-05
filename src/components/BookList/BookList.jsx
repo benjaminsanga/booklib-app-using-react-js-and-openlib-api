@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useGlobalContext } from '../../context.';
 import Book from "../BookList/Book";
 import Loading from "../Loader/Loader";
@@ -17,6 +17,8 @@ const BookList = () => {
       cover_img: singleBook.cover_id ? `https://covers.openlibrary.org/b/id/${singleBook.cover_id}-L.jpg` : coverImg
     }
   });
+
+  useEffect(() => window.scrollBy(0, 100), [])
 
   if(loading) return <Loading />;
 
