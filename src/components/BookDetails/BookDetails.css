@@ -3,7 +3,7 @@
 }
 .back-btn{
     margin-left: 20px;
-    margin-bottom: 2.6rem;
+    /* margin-bottom: 2.6rem; */
     transition: var(--transition);
 }
 .back-btn:hover{
@@ -47,6 +47,21 @@
     background-color: var(--purple-color);
     outline: -1px solid slategray;
     border-radius: 8px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.get-book-btn {
+    background: #2e40b1;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1.5rem;
 }
 
 @media screen and (min-width: 768px){

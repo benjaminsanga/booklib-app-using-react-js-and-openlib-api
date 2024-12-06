@@ -39,6 +39,7 @@ const SearchForm = () => {
                 <FaSearch className='text-purple' size = {24} />
               </button>
             </div>
+            <label>Press Enter when done.</label>
           </form>
         </div>
       </div>
