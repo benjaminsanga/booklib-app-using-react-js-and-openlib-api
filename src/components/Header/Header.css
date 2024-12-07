@@ -3,8 +3,11 @@
     background: linear-gradient(rgba(141, 39, 174, 0.3), rgba(141, 39, 174, 0.5)), url("../../images/image-1.jpg    ") center/cover no-repeat;
     flex-direction: column;
 }
-.header-title{
+.main-title {
     font-size: 4.2rem;
+}
+.header-title{
+    font-size: 2.72rem;
 }
 .header-text{
     margin-top: -1.8rem;

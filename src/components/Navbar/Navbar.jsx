@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import "./Navbar.css";
 import {HiOutlineMenuAlt3} from "react-icons/hi";
+import logo from "../../images/logo.png"
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -12,7 +13,7 @@ const Navbar = () => {
       <div className='container navbar-content flex'>
         <div className='brand-and-toggler'>
           <Link to = "/" className='navbar-brand'>
-            <span className='fw-7 fs-18 ls-1'>NASFA eLibrary</span>
+            <img src={logo} style={{width: '150px', height: 'auto'}} alt="Logo" />
           </Link>
           <button type = "button" className='navbar-toggler-btn' onClick={handleNavbar}>
             <HiOutlineMenuAlt3 size = {35} style = {{
