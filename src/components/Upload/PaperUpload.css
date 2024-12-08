@@ -1,10 +1,14 @@
 .admin-upload {
   max-width: 800px;
-  margin: 2rem auto;
+  margin: 4rem auto;
   padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+}
+
+.upload-heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .upload-form {
@@ -16,6 +20,16 @@
 .form-group {
   display: flex;
   flex-direction: column;
+  font-size: medium;
+}
+
+.paper-form-control {
+  font-size: medium;
+  width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #f9f9f9;
+  padding: 5px 10px;
 }
 
 .error {
@@ -24,14 +38,16 @@
 }
 
 .submit-btn {
+  margin: 20px 0;
   padding: 0.7rem;
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: small;
+  font-weight: 400;
   color: #fff;
   background-color: #007bff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  width: fit-content;
 }
 
 .submit-btn:hover {

@@ -12,6 +12,10 @@ import BookDetails from "./components/BookDetails/BookDetails";
 import Auth from './components/Auth/Auth';
 import { AuthProvider } from './context/auth';
 import { Toaster } from 'react-hot-toast';
+import BorrowBookForm from './components/BorrowBook/BorrowBookForm';
+import Other from './pages/Other/Other';
+import BorrowersTable from './components/BorrowBook/BorrowersTable';
+import ViewPaperList from './components/Upload/ViewPaperList';
 import PaperUpload from './components/Upload/PaperUpload';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,7 +28,12 @@ root.render(
             <Route path = "about" element = {<About />} />
             <Route path = "book" element = {<BookList />} />
             <Route path = "/book/:id" element = {<BookDetails />} />
+          </Route>
+          <Route path = "/" element = {<Other />}>
+            <Route path = "/borrow" element = {<BorrowBookForm />} />
+            <Route path = "/borrowers" element = {<BorrowersTable />} />
             <Route path = "/upload" element = {<PaperUpload />} />
+            <Route path = "/upload-papers-list" element = {<ViewPaperList />} />
           </Route>
           <Route path = "auth" element = {<Auth />} />
         </Routes>

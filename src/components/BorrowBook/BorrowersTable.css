@@ -1,0 +1,59 @@
+.borrowers-table-container {
+  max-width: 1200px;
+  min-height: 70vh;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.borrowers-table-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.borrowers-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.borrowers-table thead {
+  background: #007bff;
+  color: #fff;
+}
+
+.borrowers-table th,
+.borrowers-table td {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  font-size: 1.275rem;
+}
+
+.borrowers-table tbody tr:nth-child(even) {
+  background: #f2f2f2;
+}
+
+.borrowers-table tbody tr:hover {
+  background: #eaeaea;
+}
+
+.borrowers-table th {
+  font-weight: bold;
+}
+
+.borrowers-table td {
+  color: #555;
+}
+
+.borrowers-table td:last-child {
+  font-weight: bold;
+  text-align: center;
+}
+
+.borrowers-table td:last-child.overdue {
+  color: red;
+}

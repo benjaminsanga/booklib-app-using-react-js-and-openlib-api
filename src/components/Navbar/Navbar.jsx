@@ -40,9 +40,14 @@ const Navbar = () => {
             <li className='nav-item'>
               <Link to = "/" className='nav-link text-white fs-22 fw-6 ls-1'>Home</Link>
             </li>
-            <li className='nav-item'>
-              <Link to = "/upload" className='nav-link text-white fs-22 fw-6 ls-1'>Upload Paper</Link>
-            </li>
+            {!!user?.id && <>
+              <li className='nav-item'>
+                <Link to = "/borrow" className='nav-link text-white fs-22 fw-6 ls-1'>Borrow Book</Link>
+              </li>
+              <li className='nav-item'>
+                <Link to = "/upload" className='nav-link text-white fs-22 fw-6 ls-1'>Upload Paper</Link>
+              </li>
+            </>}
             <li className='nav-item'>
               {
                 !user?.id ? <Link to = "auth" className='nav-link text-white fs-22 fw-6 ls-1'>Login</Link> : 

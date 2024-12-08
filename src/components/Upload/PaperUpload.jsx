@@ -1,44 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import "./PaperUpload.css";
 import toast from "react-hot-toast";
 import { supabase } from "../../lib/supabase";
+import { Link } from "react-router-dom";
 
 const PaperUpload = () => {
   const { register, handleSubmit, reset, formState: { errors }, setValue, clearErrors, setError } = useForm();
-  const [documents, setDocuments] = useState([]);
-
-  // Fetch all documents
-  const fetchDocuments = async () => {
-    const { data, error } = await supabase.from("documents").select("*");
-    if (error) console.error("Error fetching documents:", error);
-    else setDocuments(data);
-  };
 
   // Handle form submission
   const onSubmit = async (formData) => {
     const { title, author, document_url } = formData;
-    console.log({ title, author, document_url })
+    // console.log({ title, author, document_url })
 
     const { data, error } = await supabase.from("documents").insert([
       {
         title,
         author,
-        document_url: document_url[0],
+        document_url: document_url,
       },
     ]);
-
-    if (error) console.error("Error uploading document:", error);
+    console.log(data)
+    if (error) toast.error("Error uploading document");
     else {
-      console.log("Document added:", data);
+      toast.success("Document added successfully");
       reset();
-      fetchDocuments();
     }
   };
-
-  useEffect(() => {
-    fetchDocuments();
-  }, []);
 
   const handleImageChange = async (event) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -70,13 +58,16 @@ const PaperUpload = () => {
         toast.error("Failed to upload document");
       }
     } else {
-      setError("document", { message: 'Cover is required' })
+      setError("document_url", { message: 'Document is required' })
     }
   };
 
   return (
     <div className="admin-upload">
-      <h1>Upload Paper</h1>
+      <div className="upload-heading">
+        <h2>Upload Paper</h2>
+        <Link to={"/upload-papers-list"}><button>View Uploaded Papers</button></Link>
+      </div>
       <form className="upload-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
           <label htmlFor="title">Title</label>
@@ -84,7 +75,7 @@ const PaperUpload = () => {
             type="text"
             id="title"
             {...register("title", { required: "Title is required" })}
-            className="form-control"
+            className="paper-form-control"
           />
           {errors.title && <span className="error">{errors.title.message}</span>}
         </div>
@@ -94,44 +85,26 @@ const PaperUpload = () => {
           <input
             type="text"
             id="author"
+            className="paper-form-control"
             {...register("author", { required: "Author is required" })}
           />
           {errors.author && <span className="error">{errors.author.message}</span>}
         </div>
 
         <div className="form-group">
-          <label htmlFor="document">Document</label>
+          <label htmlFor="document_url">Document</label>
           <input
             type="file"
-            id="document"
+            id="document_url"
             accept="application/pdf"
+            className="paper-form-control"
             onChange={handleImageChange}
           />
-          {errors.document && <span className="error">{errors.document.message}</span>}
+          {errors.document_url && <span className="error">{errors.document_url.message}</span>}
         </div>
 
         <button type="submit" className="submit-btn">Upload Document</button>
-      </form>
-
-      <h2>Uploaded Documents</h2>
-      <table className="documents-table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {documents.map((document) => (
-            <tr key={document.id}>
-              <td>{document.title}</td>
-              <td>{document.author}</td>
-              <td>{document.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      </form>      
     </div>
   );
 };

@@ -8,7 +8,7 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [isLogin, setIsLogin] = useState(true);
+  // const [isLogin, setIsLogin] = useState(true);
   const {user} = useAuth()
 
   if (!!user?.id) {
@@ -41,7 +41,7 @@ const Auth = () => {
 
       {/* Auth Form */}
       <div className="auth-form">
-        {isLogin ? (
+        {true ? (
           <>
             <h1 className="auth-form-title">Login</h1>
             <form>
@@ -105,12 +105,12 @@ const Auth = () => {
         )}
 
         {/* Switch Link */}
-        <div
+        {/* <div
           className="auth-switch"
           onClick={() => setIsLogin(!isLogin)}
         >
           Or {isLogin ? "Sign up" : "Login"} instead
-        </div>
+        </div> */}
       </div>
     </div>
   );

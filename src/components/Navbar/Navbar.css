@@ -64,8 +64,8 @@
     }
     .nav-link{
         color: var(--black-color);
-        font-size: 1.7rem;
-        font-weight: 500!important;
+        font-size: 1.275rem;
+        font-weight: 400 !important;
         opacity: 0.8;
     }
     .navbar-nav{
