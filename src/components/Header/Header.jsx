@@ -10,11 +10,11 @@ const Header = () => {
         <Navbar />
         <div className="header-content flex flex-c text-center text-white">
           <h1 className="main-title">NASFA e-Library System</h1>
-          <h2 className="header-title text-capitalize">
-            find your book of choice.
+          <h2 className="header-title ">
+            Find Your Book of Choice.
           </h2>
           <p className="header-text fs-18 fw-3">
-            Explore our vast collection and discover the book you’ve been
+            Explore our vast collection and discover the book you've been
             searching for. Our system makes it easy to locate, reserve, and
             enjoy your next read. Dive into a world of knowledge, stories, and
             inspiration today!

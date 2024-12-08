@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { supabase } from "../../lib/supabase";
 import "./Auth.css";
+import { useAuth } from "../../context/auth";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [isLogin, setIsLogin] = useState(true);
+  const {user} = useAuth()
+
+  if (!!user?.id) {
+    toast.success("You are logged in already.")
+    window.location.href = "/"
+  }
 
   const handleSignUp = async () => {
     const { error } = await supabase.auth.signUp({ email, password });
@@ -15,7 +22,8 @@ const Auth = () => {
     else toast.success("Sign-up successful!");
   };
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e) => {
+    e.preventDefault()
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) toast.error(error?.message);
     else {
@@ -52,9 +60,9 @@ const Auth = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button
-                type="button"
+                type="submit"
                 className="auth-button"
-                onClick={handleSignIn}
+                onClick={(e) => handleSignIn(e)}
               >
                 Sign In
               </button>

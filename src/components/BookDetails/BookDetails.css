@@ -76,3 +76,13 @@
         max-width: 100%;
     }
 }
+
+.book-reader {
+    margin-top: 2rem;
+}
+
+.book-reader iframe {
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+  

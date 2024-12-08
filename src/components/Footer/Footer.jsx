@@ -6,18 +6,18 @@ import comdt from "../../images/osi.jpg"
 const Footer = () => {
   return (
     <div style={{paddingTop: "5rem"}}>
-      <section class="section bg-white">
+      <section className="section bg-white">
         <div className='container' style={{paddingBottom: '7.5rem'}}>
           <p className='text-large'>
-          The E-Library Project aims to establish a functional, cost-effective, and resource-rich digital library to enhance the academic experience of students. Leveraging open-source technologies and freely available educational materials, this project will provide a centralized platform for learning, research, and collaboration. It aligns with the institution's goal of fostering innovation, accessibility, and academic excellence while minimizing financial burdens.
+          The E-Library Project aims to establish a functional, cost-effective, and resource-rich digital library to enhance the academic experience of students. Leveraging open-source technologies, this project will provide a centralized platform for learning, research, and collaboration. It aligns with the institution's goal of fostering innovation, accessibility, and academic excellence while minimizing financial burdens.
           </p>
         </div>
-        <div class="container flex flex-row" style={{alignItems: 'start'}}>
-          <div style={{flex: 1, width: '30%'}} class="mb-20">
-            <img src={comdt} alt="LIBRARIAN" class="rounded shadow" style={{width: '100%', maxWidth: '250px'}} />
+        <div className="container flex flex-row" style={{alignItems: 'start'}}>
+          <div style={{flex: 1, width: '30%'}} className="mb-20">
+            <img src={comdt} alt="LIBRARIAN" className="rounded shadow" style={{width: '100%', maxWidth: '250px'}} />
             <div>
-              <h2 class="text-large">THE COMMANDANT</h2>
-              <p class="text-medium mb-20">Major General Julius Ehioze Osifo</p>
+              <p className="text-medium">Major General Julius Ehioze Osifo</p>
+              <h2 className="text-large mb-20">COMMANDANT</h2>
             </div>
           </div>
           <div style={{width: '70%'}}>
@@ -48,22 +48,22 @@ const Footer = () => {
             </p>
           </div>
         </div>
-        <div class="container flex flex-row" style={{alignItems: 'start', marginTop: '12rem'}}>
-          <div style={{flex: 1, width: '30%'}} class="mb-20">
-            <img src={libarian} alt="LIBRARIAN" class="rounded shadow" style={{width: '100%', maxWidth: '250px'}} />
+        <div className="container flex flex-row" style={{alignItems: 'start', marginTop: '12rem'}}>
+          <div style={{flex: 1, width: '30%'}} className="mb-20">
+            <img src={libarian} alt="LIBRARIAN" className="rounded shadow" style={{width: '100%', maxWidth: '250px'}} />
             <div>
-              <h2 class="text-large">THE LIBRARIAN (CIVILLIAN)</h2>
-              <p class="text-medium mb-20">Mrs Helen Omolara Aribatise</p>
+              <p className="text-medium">Mrs Helen Omolara Aribatise</p>
+              <h2 className="text-large mb-20">LIBRARIAN</h2>
             </div>
           </div>
           <div style={{width: '70%'}}></div>
         </div>
       </section>
 
-      <footer class="section bg-dark">
-        <div class="container text-center">
+      <footer className="section bg-dark">
+        <div className="container text-center">
           <p>&copy; <script>document.write(new Date().getFullYear())</script> NASFA. All rights reserved.</p>
-          <div class="footer-links">
+          <div className="footer-links">
             <a href="/">Privacy Policy</a>
             <a href="/">Terms of Service</a>
             <a href="/">Contact</a>

@@ -1,5 +1,5 @@
-import { supabase } from "@/lib/supabase";
 import { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
 
 const AuthContext = createContext(null);
 
@@ -18,10 +18,21 @@ export const AuthProvider = ({ children }) => {
       setUser(session?.user ?? null);
     });
 
-    return () => {authListener.subscription.unsubscribe()};
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, setUser, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);
