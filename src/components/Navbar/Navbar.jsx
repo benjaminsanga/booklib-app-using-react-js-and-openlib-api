@@ -41,7 +41,7 @@ const Navbar = () => {
               <Link to = "/" className='nav-link text-white fs-22 fw-6 ls-1'>Home</Link>
             </li>
             <li className='nav-item'>
-              <Link to = "/upload" className='nav-link text-white fs-22 fw-6 ls-1'>Upload</Link>
+              <Link to = "/upload" className='nav-link text-white fs-22 fw-6 ls-1'>Upload Paper</Link>
             </li>
             <li className='nav-item'>
               {

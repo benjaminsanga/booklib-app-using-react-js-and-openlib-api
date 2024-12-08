@@ -1,48 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import "./PaperUpload.css";
-import { createClient } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
-
-// Supabase Configuration
-const supabaseUrl = "https://your-supabase-url.supabase.co"; // Replace with your Supabase URL
-const supabaseKey = "your-supabase-key"; // Replace with your Supabase Key
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from "../../lib/supabase";
 
 const PaperUpload = () => {
   const { register, handleSubmit, reset, formState: { errors }, setValue, clearErrors, setError } = useForm();
-  const [books, setBooks] = useState([]);
+  const [documents, setDocuments] = useState([]);
 
-  // Fetch all books
-  const fetchBooks = async () => {
-    const { data, error } = await supabase.from("books").select("*");
-    if (error) console.error("Error fetching books:", error);
-    else setBooks(data);
+  // Fetch all documents
+  const fetchDocuments = async () => {
+    const { data, error } = await supabase.from("documents").select("*");
+    if (error) console.error("Error fetching documents:", error);
+    else setDocuments(data);
   };
 
   // Handle form submission
   const onSubmit = async (formData) => {
-    const { title, author, description, cover } = formData;
+    const { title, author, document_url } = formData;
+    console.log({ title, author, document_url })
 
-    const { data, error } = await supabase.from("books").insert([
+    const { data, error } = await supabase.from("documents").insert([
       {
         title,
         author,
-        description,
-        cover: cover[0], // Save the file reference
+        document_url: document_url[0],
       },
     ]);
 
-    if (error) console.error("Error uploading book:", error);
+    if (error) console.error("Error uploading document:", error);
     else {
-      console.log("Book added:", data);
+      console.log("Document added:", data);
       reset();
-      fetchBooks(); // Refresh the book list
+      fetchDocuments();
     }
   };
 
   useEffect(() => {
-    fetchBooks();
+    fetchDocuments();
   }, []);
 
   const handleImageChange = async (event) => {
@@ -67,15 +62,15 @@ const PaperUpload = () => {
         }
   
         const data = await res.json();
-        setValue("photo_url", data.secure_url);
-        clearErrors("photo_url");
-        toast.success("Image uploaded successfully");
+        setValue("document_url", data.secure_url);
+        clearErrors("document_url");
+        toast.success("Document uploaded successfully");
       } catch (error) {
-        console.error("Image upload failed:", error);
-        toast.error("Failed to upload image");
+        console.error("Document upload failed:", error);
+        toast.error("Failed to upload document");
       }
     } else {
-      setError("cover", { message: 'Cover is required' })
+      setError("document", { message: 'Cover is required' })
     }
   };
 
@@ -105,31 +100,21 @@ const PaperUpload = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            {...register("description", { required: "Description is required" })}
-          />
-          {errors.description && (
-            <span className="error">{errors.description.message}</span>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="cover">Book Cover</label>
+          <label htmlFor="document">Document</label>
           <input
             type="file"
-            id="cover"
+            id="document"
+            accept="application/pdf"
             onChange={handleImageChange}
           />
-          {errors.cover && <span className="error">{errors.cover.message}</span>}
+          {errors.document && <span className="error">{errors.document.message}</span>}
         </div>
 
-        <button type="submit" className="submit-btn">Upload Book</button>
+        <button type="submit" className="submit-btn">Upload Document</button>
       </form>
 
-      <h2>Uploaded Books</h2>
-      <table className="books-table">
+      <h2>Uploaded Documents</h2>
+      <table className="documents-table">
         <thead>
           <tr>
             <th>Title</th>
@@ -138,11 +123,11 @@ const PaperUpload = () => {
           </tr>
         </thead>
         <tbody>
-          {books.map((book) => (
-            <tr key={book.id}>
-              <td>{book.title}</td>
-              <td>{book.author}</td>
-              <td>{book.description}</td>
+          {documents.map((document) => (
+            <tr key={document.id}>
+              <td>{document.title}</td>
+              <td>{document.author}</td>
+              <td>{document.description}</td>
             </tr>
           ))}
         </tbody>

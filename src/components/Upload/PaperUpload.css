@@ -38,23 +38,23 @@
   background-color: #0056b3;
 }
 
-.books-table {
+.documents-table {
   width: 100%;
   margin-top: 2rem;
   border-collapse: collapse;
 }
 
-.books-table th, .books-table td {
+.documents-table th, .documents-table td {
   border: 1px solid #ccc;
   padding: 0.5rem;
   text-align: left;
 }
 
-.books-table th {
+.documents-table th {
   background-color: #007bff;
   color: #fff;
 }
 
-.books-table tr:nth-child(even) {
+.documents-table tr:nth-child(even) {
   background-color: #f2f2f2;
 }

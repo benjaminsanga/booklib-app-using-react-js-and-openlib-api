@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import Loading from "../Loader/Loader";
 import coverImg from "../../images/cover_not_found.jpg";
 import "./BookDetails.css";
 import { FaArrowLeft } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/auth";
 
-const URL = "https://openlibrary.org/works/";
+const OPEN_LIBRARY_URL = "https://openlibrary.org/works/";
+const INTERNET_ARCHIVE_URL = "https://archive.org/details/";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -14,31 +16,32 @@ const BookDetails = () => {
   const [book, setBook] = useState(null);
   const [ocaid, setOcaid] = useState(null);
   const navigate = useNavigate();
+  const {user} = useAuth()
 
   useEffect(() => {
     setLoading(true);
 
     async function getBookDetails() {
       try {
-        const response = await fetch(`${URL}${id}.json`);
+        const response = await fetch(`${OPEN_LIBRARY_URL}${id}.json`);
         const data = await response.json();
 
         if (data) {
           const { description, title, covers, subject_places, subject_times, subjects, authors } = data;
           const newBook = {
-            description: description ? description.value || description : "No description found",
-            title: title,
+            description: description?.value || description || "No description found",
+            title,
             cover_img: covers ? `https://covers.openlibrary.org/b/id/${covers[0]}-L.jpg` : coverImg,
-            subject_places: subject_places ? subject_places.join(", ") : "No subject places found",
-            subject_times: subject_times ? subject_times.join(", ") : "No subject times found",
-            subjects: subjects ? subjects.join(", ") : "No subjects found",
-            author: authors ? authors[0]?.name : "Unknown"
+            subject_places: subject_places?.join(", ") || "No subject places found",
+            subject_times: subject_times?.join(", ") || "No subject times found",
+            subjects: subjects?.join(", ") || "No subjects found",
+            author: authors?.[0]?.name || "Unknown",
           };
           setBook(newBook);
 
           // Fetch ocaid from Internet Archive
           if (title) {
-            getOcaid(title, authors?.length ? authors[0]?.name : "");
+            getOcaid(title, authors?.[0]?.name || "");
           }
         } else {
           setBook(null);
@@ -55,16 +58,11 @@ const BookDetails = () => {
         const query = `title:"${encodeURIComponent(title)}"+AND+creator:"${encodeURIComponent(author)}"`;
         const archiveUrl = `https://archive.org/advancedsearch.php?q=${query}&fl[]=identifier&rows=1&output=json`;
 
-        console.log("Fetching Internet Archive Data with URL:", archiveUrl);
-
         const archiveResponse = await fetch(archiveUrl);
         const archiveData = await archiveResponse.json();
 
-        console.log("Internet Archive Response:", archiveData);
-
         if (archiveData?.response?.docs?.length > 0) {
           const ocaid = archiveData.response.docs[0].identifier;
-          console.log("OCAID Found:", ocaid);
           setOcaid(ocaid);
         } else {
           console.warn("No OCAID found for this book.");
@@ -83,10 +81,15 @@ const BookDetails = () => {
     <section className="book-details">
       <div className="container">
         <div className="action-buttons">
-          <button type="button" className="flex flex-c back-btn" onClick={() => navigate("/book")}>
+          <button
+            type="button"
+            className="flex flex-c back-btn"
+            onClick={() => navigate("/book")}
+          >
             <FaArrowLeft size={22} />
             <span className="fs-18 fw-6">Go Back</span>
           </button>
+          {!user?.id && <Link to={"/auth"}><button>Login to see book content</button></Link>}
         </div>
 
         <div className="book-details-content grid">
@@ -120,16 +123,18 @@ const BookDetails = () => {
         </div>
 
         {ocaid ? (
-          <div className="book-reader">
+            !!user?.id ? <div className="book-reader">
             <h3>Read the Book</h3>
             <iframe
-              src={`https://archive.org/stream/${ocaid}`}
+              src={`${INTERNET_ARCHIVE_URL}${ocaid}`}
               title="Internet Archive Book Reader"
               width="100%"
               height="600"
               frameBorder="0"
               allowFullScreen
             ></iframe>
+          </div> : <div style={{margin: '20px 0', textAlign: 'center'}}>
+            <Link to={"/auth"}><button>Login to see book content</button></Link>
           </div>
         ) : (
           <div className="book-reader">
