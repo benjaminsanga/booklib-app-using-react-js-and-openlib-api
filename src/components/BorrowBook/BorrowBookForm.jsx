@@ -11,7 +11,11 @@ const BorrowForm = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      status: 'Not Returned'
+    }
+  });
 
   const onSubmit = async (data) => {
     try {

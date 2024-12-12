@@ -9,6 +9,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   // const [isLogin, setIsLogin] = useState(true);
+  const [isAdminLogin, setIsAdminLogin] = useState(false);
   const {user} = useAuth()
 
   if (!!user?.id) {
@@ -22,13 +23,49 @@ const Auth = () => {
     else toast.success("Sign-up successful!");
   };
 
-  const handleSignIn = async (e) => {
-    e.preventDefault()
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) toast.error(error?.message);
-    else {
-      toast.success("Login successful!");
-      window.location.href = "/"
+  const handleSignInAsAdmin = async (e) => {
+    e.preventDefault();
+    try {  
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+  
+      if (authError) {
+        toast.error(authError.message);
+      } else {
+        localStorage.setItem("nasfa-user-role", "admin")
+        toast.success("Login successful!");
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An unexpected error occurred");
+    }
+  };
+
+  const handleSignInAsStudent = async (e) => {
+    e.preventDefault();
+    try {
+      // Verify the user's credentials against the "students" table
+      const { data: student, error: queryError } = await supabase
+        .from("students")
+        .select("id, email")
+        .eq("email", email)
+        .eq("password", password)
+        .single();
+  
+      if (queryError || !student) {
+        toast.error("Invalid email or password");
+        return;
+      } else {
+        localStorage.setItem("nasfa-user-role", "student")
+        toast.success("Login successful!");
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An unexpected error occurred");
     }
   };
 
@@ -43,7 +80,7 @@ const Auth = () => {
       <div className="auth-form">
         {true ? (
           <>
-            <h1 className="auth-form-title">Login</h1>
+            <h1 className="auth-form-title">{isAdminLogin ? "Admin" : "Student"} Login</h1>
             <form>
               <input
                 type="email"
@@ -62,11 +99,17 @@ const Auth = () => {
               <button
                 type="submit"
                 className="auth-button"
-                onClick={(e) => handleSignIn(e)}
+                onClick={(e) => isAdminLogin ? handleSignInAsAdmin(e) : handleSignInAsStudent(e)}
               >
                 Sign In
               </button>
             </form>
+            <div
+              className="auth-switch"
+              onClick={() => setIsAdminLogin(!isAdminLogin)}
+            >
+              Or {isAdminLogin ? "Login as Student" : "Login as Admin"} instead
+            </div>
           </>
         ) : (
           <>

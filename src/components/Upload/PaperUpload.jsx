@@ -7,12 +7,11 @@ import { Link } from "react-router-dom";
 
 const PaperUpload = () => {
   const { register, handleSubmit, reset, formState: { errors }, setValue, clearErrors, setError } = useForm();
-
+  const userRole = localStorage.getItem("nasfa-user-role")
+  
   // Handle form submission
   const onSubmit = async (formData) => {
     const { title, author, document_url } = formData;
-    // console.log({ title, author, document_url })
-
     const { data, error } = await supabase.from("documents").insert([
       {
         title,
@@ -68,43 +67,45 @@ const PaperUpload = () => {
         <h2>Upload Paper</h2>
         <Link to={"/upload-papers-list"}><button>View Uploaded Papers</button></Link>
       </div>
-      <form className="upload-form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            id="title"
-            {...register("title", { required: "Title is required" })}
-            className="paper-form-control"
-          />
-          {errors.title && <span className="error">{errors.title.message}</span>}
-        </div>
+      {userRole === "admin" && <>
+        <form className="upload-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              {...register("title", { required: "Title is required" })}
+              className="paper-form-control"
+            />
+            {errors.title && <span className="error">{errors.title.message}</span>}
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="author">Author</label>
-          <input
-            type="text"
-            id="author"
-            className="paper-form-control"
-            {...register("author", { required: "Author is required" })}
-          />
-          {errors.author && <span className="error">{errors.author.message}</span>}
-        </div>
+          <div className="form-group">
+            <label htmlFor="author">Author</label>
+            <input
+              type="text"
+              id="author"
+              className="paper-form-control"
+              {...register("author", { required: "Author is required" })}
+            />
+            {errors.author && <span className="error">{errors.author.message}</span>}
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="document_url">Document</label>
-          <input
-            type="file"
-            id="document_url"
-            accept="application/pdf"
-            className="paper-form-control"
-            onChange={handleImageChange}
-          />
-          {errors.document_url && <span className="error">{errors.document_url.message}</span>}
-        </div>
+          <div className="form-group">
+            <label htmlFor="document_url">Document</label>
+            <input
+              type="file"
+              id="document_url"
+              accept="application/pdf"
+              className="paper-form-control"
+              onChange={handleImageChange}
+            />
+            {errors.document_url && <span className="error">{errors.document_url.message}</span>}
+          </div>
 
-        <button type="submit" className="submit-btn">Upload Document</button>
-      </form>      
+          <button type="submit" className="submit-btn">Upload Document</button>
+        </form>  
+      </>}    
     </div>
   );
 };

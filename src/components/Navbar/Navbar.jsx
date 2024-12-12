@@ -9,7 +9,8 @@ import toast from 'react-hot-toast';
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const handleNavbar = () => setToggleMenu(!toggleMenu);
-  const {user, logout} = useAuth()
+  const {logout} = useAuth()
+  const userRole = localStorage.getItem("nasfa-user-role")
 
   const handleLogout = async () => {
     try {
@@ -40,7 +41,7 @@ const Navbar = () => {
             <li className='nav-item'>
               <Link to = "/" className='nav-link text-white fs-22 fw-6 ls-1'>Home</Link>
             </li>
-            {!!user?.id && <>
+            {userRole === 'admin' && <>
               <li className='nav-item'>
                 <Link to = "/borrow" className='nav-link text-white fs-22 fw-6 ls-1'>Borrow Book</Link>
               </li>
@@ -48,9 +49,14 @@ const Navbar = () => {
                 <Link to = "/upload" className='nav-link text-white fs-22 fw-6 ls-1'>Upload Paper</Link>
               </li>
             </>}
+            {userRole === 'student' && <>
+              <li className='nav-item'>
+                <Link to = "/upload-papers-list" className='nav-link text-white fs-22 fw-6 ls-1'>Papers</Link>
+              </li>
+            </>}
             <li className='nav-item'>
               {
-                !user?.id ? <Link to = "auth" className='nav-link text-white fs-22 fw-6 ls-1'>Login</Link> : 
+                !userRole ? <Link to = "auth" className='nav-link text-white fs-22 fw-6 ls-1'>Login</Link> : 
                 <Link to="auth" className='nav-link text-white fs-22 fw-6 ls-1' onClick={(e) => {
                   e.preventDefault()
                   handleLogout()

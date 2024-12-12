@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
+    localStorage.removeItem("nasfa-user-role")
     await supabase.auth.signOut();
     setUser(null);
   };
@@ -36,3 +37,9 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+// Set session duration for 2 days
+supabase.auth.setSession({ access_token: "qazxsw23edcvfr4", refresh_token: "4rfvcde32wsxzaq1" })
+// .auth.setAuth({
+//   expiresIn: 172800, // 2 days in seconds
+// });
