@@ -48,14 +48,21 @@ const Auth = () => {
     e.preventDefault();
     try {
       // Verify the user's credentials against the "students" table
-      const { data: student, error: queryError } = await supabase
-        .from("students")
+      const { data: student1, error: queryError1 } = await supabase
+        .from("short_course_students")
+        .select("id, email")
+        .eq("email", email)
+        .eq("password", password)
+        .single();
+
+      const { data: student2, error: queryError2 } = await supabase
+        .from("long_course_students")
         .select("id, email")
         .eq("email", email)
         .eq("password", password)
         .single();
   
-      if (queryError || !student) {
+      if (queryError1 || !student1 || queryError2 || !student2) {
         toast.error("Invalid email or password");
         return;
       } else {
