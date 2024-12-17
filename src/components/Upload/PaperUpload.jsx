@@ -2,18 +2,34 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import "./PaperUpload.css";
 import toast from "react-hot-toast";
+import AWS from "aws-sdk";
 import { supabase } from "../../lib/supabase";
 import { Link } from "react-router-dom";
 
 const PaperUpload = () => {
-  const { register, handleSubmit, reset, formState: { errors }, setValue, clearErrors, setError } = useForm();
+  const { register, handleSubmit, reset, formState: { errors }, setValue, setError } = useForm();
   const userRole = localStorage.getItem("nasfa-user-role");
+
+  // AWS S3 Configuration
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY,
+    secretAccessKey: process.env.REACT_APP_AWS_SECRET_KEY,
+    region: process.env.REACT_APP_AWS_REGION,
+  });
+  const bucketName = process.env.REACT_APP_S3_BUCKET_NAME;
 
   const onSubmit = async (formData) => {
     const { title, author, document_url } = formData;
+
+    if (!!title || !!author || !!document_url) {
+      toast.error("Fill all fields")
+      return;
+    }
+
     const { data, error } = await supabase.from("documents").insert([
       { title, author, document_url },
     ]);
+    
     console.log("data:", data)
     if (error) toast.error("Error uploading document");
     else {
@@ -22,38 +38,29 @@ const PaperUpload = () => {
     }
   };
 
-  const handleImageChange = async (event) => {
+  const handleFileUpload = async (event) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append("file", file);
+      const fileName = `${Date.now()}-${file.name}`; // Unique file name
 
+      const params = {
+        Bucket: bucketName, // Ensure this is set correctly
+        Key: fileName, // The file name in the bucket
+        Body: file, // The file content
+        ContentType: file.type, // The MIME type of the file
+      };
+      
       try {
-        const res = await fetch("https://file.io", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_FILE_IO}`,
-          },
-          body: formData,
-        });
-
-        if (!res.ok) {
-          throw new Error("Failed to upload file");
-        }
-
-        const data = await res.json();
-
-        if (!data.success) {
-          throw new Error("File upload failed");
-        }
-console.log("data:", data)
-        setValue("document_url", data.link);
-        clearErrors("document_url");
+        const uploadResult = await s3.upload(params).promise();
+        console.log("Upload Result:", uploadResult);
+        const fileUrl = uploadResult.Location;
+        setValue("document_url", fileUrl);
         toast.success("Document uploaded successfully");
       } catch (error) {
-        console.error("Document upload failed:", error);
+        console.error("Error uploading to S3:", error);
         toast.error("Failed to upload document");
       }
+      
     } else {
       setError("document_url", { message: "Document is required" });
     }
@@ -94,7 +101,7 @@ console.log("data:", data)
               id="document_url"
               accept="application/pdf"
               className="paper-form-control"
-              onChange={handleImageChange}
+              onChange={handleFileUpload}
             />
             {errors.document_url && <span className="error">{errors.document_url.message}</span>}
           </div>
