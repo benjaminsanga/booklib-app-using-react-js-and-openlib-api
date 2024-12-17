@@ -81,3 +81,7 @@
 .footer-links a:hover {
   color: #aaa;
 }
+
+p {
+  padding: 10px 0;
+}

@@ -84,7 +84,6 @@ const Footer = () => {
               <li>Security Management and Operations</li>
               <li>Chartered Librarianship (Nigeria)</li>
               <li>Chartered Management Practitioner</li>
-              <li></li>
             </ol>            
             <p>
               A respected member of numerous professional bodies, Mrs. Aribatise is affiliated with:
