@@ -7,19 +7,14 @@ import { Link } from "react-router-dom";
 
 const PaperUpload = () => {
   const { register, handleSubmit, reset, formState: { errors }, setValue, clearErrors, setError } = useForm();
-  const userRole = localStorage.getItem("nasfa-user-role")
-  
-  // Handle form submission
+  const userRole = localStorage.getItem("nasfa-user-role");
+
   const onSubmit = async (formData) => {
     const { title, author, document_url } = formData;
     const { data, error } = await supabase.from("documents").insert([
-      {
-        title,
-        author,
-        document_url: document_url,
-      },
+      { title, author, document_url },
     ]);
-    console.log(data)
+    console.log("data:", data)
     if (error) toast.error("Error uploading document");
     else {
       toast.success("Document added successfully");
@@ -31,25 +26,28 @@ const PaperUpload = () => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       const formData = new FormData();
-  
       formData.append("file", file);
-      formData.append("upload_preset", "nasfa-dbms");
-  
+
       try {
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/dlbeorqf7/image/upload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-  
+        const res = await fetch("https://file.io", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_FILE_IO}`,
+          },
+          body: formData,
+        });
+
         if (!res.ok) {
-          throw new Error("Failed to upload image");
+          throw new Error("Failed to upload file");
         }
-  
+
         const data = await res.json();
-        setValue("document_url", data.secure_url);
+
+        if (!data.success) {
+          throw new Error("File upload failed");
+        }
+console.log("data:", data)
+        setValue("document_url", data.link);
         clearErrors("document_url");
         toast.success("Document uploaded successfully");
       } catch (error) {
@@ -57,7 +55,7 @@ const PaperUpload = () => {
         toast.error("Failed to upload document");
       }
     } else {
-      setError("document_url", { message: 'Document is required' })
+      setError("document_url", { message: "Document is required" });
     }
   };
 
@@ -67,7 +65,7 @@ const PaperUpload = () => {
         <h2>Upload Paper</h2>
         <Link to={"/upload-papers-list"}><button>View Uploaded Papers</button></Link>
       </div>
-      {userRole === "admin" && <>
+      {userRole === "admin" && (
         <form className="upload-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
             <label htmlFor="title">Title</label>
@@ -79,7 +77,6 @@ const PaperUpload = () => {
             />
             {errors.title && <span className="error">{errors.title.message}</span>}
           </div>
-
           <div className="form-group">
             <label htmlFor="author">Author</label>
             <input
@@ -90,7 +87,6 @@ const PaperUpload = () => {
             />
             {errors.author && <span className="error">{errors.author.message}</span>}
           </div>
-
           <div className="form-group">
             <label htmlFor="document_url">Document</label>
             <input
@@ -102,10 +98,9 @@ const PaperUpload = () => {
             />
             {errors.document_url && <span className="error">{errors.document_url.message}</span>}
           </div>
-
           <button type="submit" className="submit-btn">Upload Document</button>
-        </form>  
-      </>}    
+        </form>
+      )}
     </div>
   );
 };

@@ -54,7 +54,7 @@ const ViewPaperList = () => {
         </tbody>
       </table>
 
-      {/* PDF Viewer */}
+      {/* Document Viewer */}
       {selectedDocument && (
         <div className="pdf-viewer-overlay" style={overlayStyle}>
           <div className="pdf-viewer-container" style={viewerStyle}>
@@ -63,7 +63,7 @@ const ViewPaperList = () => {
             </button>
             <iframe
               src={selectedDocument}
-              title="PDF Viewer"
+              title="Document Viewer"
               style={iframeStyle}
               frameBorder="0"
             />

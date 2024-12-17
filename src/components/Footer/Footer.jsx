@@ -52,11 +52,58 @@ const Footer = () => {
           <div style={{flex: 1, width: '30%'}} className="mb-20">
             <img src={libarian} alt="LIBRARIAN" className="rounded shadow" style={{width: '100%', maxWidth: '250px'}} />
             <div>
-              <p className="text-medium">Mrs Helen Omolara Aribatise</p>
-              <h2 className="text-large mb-20">LIBRARIAN</h2>
+              <p className="text-medium">Mrs. Aribatise Helen Omolara</p>
+              <h2 className="text-large mb-20">Deputy Director, Head of library NASFA.</h2>
             </div>
           </div>
-          <div style={{width: '70%'}}></div>
+          <div style={{width: '70%'}}>
+            <p>
+              Mrs. Aribatise Helen Omolara is a distinguished librarian, educator, and administrator with over 20 years of professional experience in research, teaching, and lecturing across secondary and tertiary educational institutions. She currently serves as the deputy  Director Library and Head of Department at NASFA Library, where her leadership and expertise have significantly advanced the institution's academic and informational services.
+            </p>
+            <p>
+              Hailing from Osun State, Mrs. Aribatise is a proud member of the Nigerian Library Association, demonstrating her unwavering commitment to professional excellence and the advancement of librarianship in Nigeria.
+            </p>
+            <p>
+              Her academic credentials are exemplary, reflecting her deep passion for education and lifelong learning. She holds:
+            </p>
+            <ol>
+              <li>NCE in Economics and Library Science</li>
+              <li>BSc in Library and Information Science</li>
+              <li>Postgraduate Diploma (PGD) in Theology</li>
+              <li>Master's Degree in Public Administration (Human Resource Management)</li>
+              <li>Master's Degree in Library, Archival, and Information Studies</li>
+              <li>Master's Degree in Educational Management</li>
+              <li>She is also actively pursuing a PhD in Librarianship, further solidifying her expertise in the field.</li>
+            </ol>
+            <p>
+              Mrs. Aribatise's professional certifications are as impressive as her academic achievements, showcasing her versatility and commitment to professional development. She is certified in:
+            </p>
+            <ol>
+              <li>Computer Appreciation</li>
+              <li>Entrepreneurship Development</li>
+              <li>Security Management and Operations</li>
+              <li>Chartered Librarianship (Nigeria)</li>
+              <li>Chartered Management Practitioner</li>
+              <li></li>
+            </ol>            
+            <p>
+              A respected member of numerous professional bodies, Mrs. Aribatise is affiliated with:
+            </p>
+            <ol>
+              <li>The Nigerian Institute of Management (NIM)</li>
+              <li>The Institute of Public Administration of Nigeria (IPAN)</li>
+              <li>The Institute of Security Management and Operations Nigeria (ISMON)</li>
+              <li>Various sections of the Nigerian Library Association, including Cataloguing, Classification, and Indexing, as well as Academic and Research Libraries</li>
+              <li>The Nigerian Association for Educational Media and Technology</li>
+              <li>Her dynamic interests extend beyond her professional life. Mrs. Aribatise enjoys studying, conducting research, dancing, cooking, listening to music, and exploring the Internet.</li>
+            </ol>                        
+            <p>
+              Mrs. Aribatise is married with children and balances her professional and personal responsibilities with remarkable dedication.
+            </p>
+            <p>
+              With a wealth of experience, a strong academic background, and a passion for knowledge and innovation, Mrs. Aribatise Helen Omolara continues to inspire excellence in the library and information science profession.
+            </p>
+          </div>
         </div>
       </section>
 
