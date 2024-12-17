@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import React, { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase";
 import "./PaperUpload.css";
 
 const ViewPaperList = () => {
@@ -8,9 +8,16 @@ const ViewPaperList = () => {
 
   // Fetch all documents
   const fetchDocuments = async () => {
-    const { data, error } = await supabase.from("documents").select("*");
-    if (error) console.error("Error fetching documents:", error);
-    else setDocuments(data);
+    try {
+      const { data, error } = await supabase.from("documents").select("*");
+      if (error) {
+        console.error("Error fetching documents:", error);
+      } else {
+        setDocuments(data);
+      }
+    } catch (error) {
+      console.error("Unexpected error fetching documents:", error);
+    }
   };
 
   useEffect(() => {
@@ -41,12 +48,12 @@ const ViewPaperList = () => {
                 {document.document_url ? (
                   <button
                     onClick={() => setSelectedDocument(document.document_url)}
-                    style={{ color: 'blueviolet', cursor: 'pointer' }}
+                    style={{ color: "blueviolet", cursor: "pointer" }}
                   >
                     View
                   </button>
                 ) : (
-                  <span style={{ color: 'gray' }}>No Document</span>
+                  <span style={{ color: "gray" }}>No Document</span>
                 )}
               </td>
             </tr>
@@ -76,38 +83,38 @@ const ViewPaperList = () => {
 
 // Styles for the overlay and PDF viewer
 const overlayStyle = {
-  position: 'fixed',
+  position: "fixed",
   top: 0,
   left: 0,
-  width: '100%',
-  height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  width: "100%",
+  height: "100%",
+  backgroundColor: "rgba(0, 0, 0, 0.7)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   zIndex: 1000,
 };
 
 const viewerStyle = {
-  width: '80%',
-  height: '80%',
-  backgroundColor: '#fff',
-  position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
+  width: "80%",
+  height: "80%",
+  backgroundColor: "#fff",
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
 };
 
 const iframeStyle = {
   flex: 1,
-  width: '100%',
-  border: 'none',
+  width: "100%",
+  border: "none",
 };
 
 const closeButtonStyle = {
-  alignSelf: 'flex-end',
-  margin: '10px',
-  padding: '5px 10px',
-  cursor: 'pointer',
+  alignSelf: "flex-end",
+  margin: "10px",
+  padding: "5px 10px",
+  cursor: "pointer",
 };
 
 export default ViewPaperList;
