@@ -21,11 +21,6 @@ const PaperUpload = () => {
   const onSubmit = async (formData) => {
     const { title, author, document_url } = formData;
 
-    if (!!title || !!author || !!document_url) {
-      toast.error("Fill all fields")
-      return;
-    }
-
     const { data, error } = await supabase.from("documents").insert([
       { title, author, document_url },
     ]);
