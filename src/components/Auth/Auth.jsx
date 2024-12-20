@@ -3,6 +3,7 @@ import { toast } from "react-hot-toast";
 import { supabase } from "../../lib/supabase";
 import "./Auth.css";
 import { useAuth } from "../../context/auth";
+import bcrypt from "bcryptjs";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ const Auth = () => {
   const [role, setRole] = useState("");
   // const [isLogin, setIsLogin] = useState(true);
   const [isAdminLogin, setIsAdminLogin] = useState(false);
+  const [personnelNumber, setPersonnelNumber] = useState("");
   const {user} = useAuth()
 
   if (!!user?.id) {
@@ -25,24 +27,59 @@ const Auth = () => {
 
   const handleSignInAsAdmin = async (e) => {
     e.preventDefault();
-    try {  
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
-  
-      if (authError) {
-        toast.error(authError.message);
-      } else {
-        localStorage.setItem("nasfa-user-role", "admin")
-        toast.success("Login successful!");
-        window.location.href = "/";
+    if (!personnelNumber || !password) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      // Fetch the admin record by personnel number
+      const { data, error } = await supabase
+        .from("admins")
+        .select("id, password, role, personnel_number")
+        .eq("personnel_number", personnelNumber)
+        .single();
+
+      if (error || !data) {
+        toast.error("Invalid personnel number or password.");
+        return;
       }
-    } catch (error) {
-      console.error(error);
-      toast.error("An unexpected error occurred");
+
+      // Compare the entered password with the hashed password
+      const isMatch = await bcrypt.compare(password, data.password);
+
+      if (!isMatch) {
+        toast.error("Invalid personnel number or password.");
+      } else {
+        toast.success("Login successful!");
+        localStorage.setItem("nasfa-user-role", "admin")
+        window.location.href = `/`;
+      }
+    } catch (err) {
+      toast.error("Error verifying credentials.");
     }
   };
+
+  // const handleSignInAsAdmin = async (e) => {
+  //   e.preventDefault();
+  //   try {  
+  //     const { error: authError } = await supabase.auth.signInWithPassword({
+  //       email: email,
+  //       password: password,
+  //     });
+  
+  //     if (authError) {
+  //       toast.error(authError.message);
+  //     } else {
+  //       localStorage.setItem("nasfa-user-role", "admin")
+  //       toast.success("Login successful!");
+  //       window.location.href = "/";
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error("An unexpected error occurred");
+  //   }
+  // };
 
   const handleSignInAsStudent = async (e) => {
     e.preventDefault();
@@ -89,13 +126,19 @@ const Auth = () => {
           <>
             <h1 className="auth-form-title">{isAdminLogin ? "Admin" : "Student"} Login</h1>
             <form>
-              <input
+              {isAdminLogin ? <input
+                className="auth-input"
+                type="text"
+                placeholder="Personnel Number"
+                value={personnelNumber}
+                onChange={(e) => setPersonnelNumber(e.target.value)}
+              /> : <input
                 type="email"
                 className="auth-input"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-              />
+              />}
               <input
                 type="password"
                 className="auth-input"
